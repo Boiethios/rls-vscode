@@ -14,6 +14,7 @@ import { runRlsViaRustup, rustupUpdate } from './rustup';
 import { startSpinner, stopSpinner } from './spinner';
 import { RLSConfiguration } from './configuration';
 import { activateTaskProvider, runCommand } from './tasks';
+import { MyFoldingRangeProvider } from './folding';
 
 import * as child_process from 'child_process';
 import * as fs from 'fs';
@@ -31,6 +32,7 @@ export async function activate(context: ExtensionContext) {
     workspace.onDidOpenTextDocument((doc) => didOpenTextDocument(doc, context));
     workspace.textDocuments.forEach((doc) => didOpenTextDocument(doc, context));
     workspace.onDidChangeWorkspaceFolders((e) => didChangeWorkspaceFolders(e, context));
+    languages.registerFoldingRangeProvider({ scheme: 'file', language: 'rust' }, new MyFoldingRangeProvider);
 }
 
 export function deactivate(): Promise<void> {
